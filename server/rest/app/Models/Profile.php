@@ -12,6 +12,6 @@ class Profile extends Model
         "user_id",
         "name",
         "username",
-        // todo: add monkeys
+         // todo: add monkeys
     ];
 }

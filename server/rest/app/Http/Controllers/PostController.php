@@ -6,6 +6,7 @@ use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class PostController extends Controller
@@ -47,16 +48,38 @@ class PostController extends Controller
         $post->delete();
         return response()->json(["message" => "Post deleted successfully."], 200);
     }
+    // ! get bugged if profile not onboarded, moke contraint or checks for that
+    // todo: make another middleware to check is_first_login
     public function getPosts(){
-        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")->select("profiles.username","posts.title","posts.description")->orderby("posts.created_at","DESC")->get();
-        return response()->json(["posts"=>$posts]);
+        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
+                     ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
+                     ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+                     ->groupBy("posts.id")
+                     ->orderby("posts.created_at","DESC")
+                     ->get();
+        return response()->json(["posts"=>$posts],200);
     }
+    
     public function getUserPosts(Request $request){
-        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")->select("profiles.username","posts.title","posts.description")->where("user_id",$request->user()->id)->orderby("posts.created_at","DESC")->get();
-        return response()->json(["posts"=>$posts]);
+        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
+                     ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
+                     ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+                     ->where("posts.user_id",$request->user()->id)
+                     ->groupBy("posts.id")
+                     ->orderby("posts.created_at","DESC")
+                     ->get();
+        return response()->json(["posts"=>$posts],200);
     }
+    
     public function getPost(Request $request,$uuid){
-        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")->select("profiles.username","posts.title","posts.description")->where("posts.user_id",$request->user()->id)->where("post_uuid",$uuid)->orderby("posts.created_at","DESC")->get();
-        return response()->json(["posts"=>$posts]);
+        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
+                     ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
+                     ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+                     ->where("posts.user_id",$request->user()->id)
+                     ->where("posts.post_uuid",$uuid)
+                     ->groupBy("posts.id")
+                     ->orderby("posts.created_at","DESC")
+                     ->get();
+        return response()->json(["posts"=>$posts],200);
     }
 }

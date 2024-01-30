@@ -14,12 +14,16 @@ class ProfileController extends Controller
         $profile = Profile::create([
             "name" => $validated["name"],
             "username" => $validated["username"],
-            "user_id" => $request->user()->id
+            "user_id" => $request->user()->id,
             // ? add image/nft/avatar
         ]);
+        $user = $request->user();
+        $user->is_first_login = false;
+        $user->save();
         return response()->json(["message"=>"Profile added successfully!"]);
     }
     public function edit(UpdateProfileRequest $request)
+    // todo: handle like insta
     {
         $validated = $request->validated();
         $profile = Profile::where("user_id",$request->user()->id);

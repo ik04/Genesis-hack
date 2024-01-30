@@ -22,15 +22,24 @@ Route::get("healthcheck",function(){
 });
 Route::post("authenticate",[UserController::class,"authenticate"]);
 
+
+Route::prefix("get")->group(function(){
+    Route::get("profile",[ProfileController::class,"getProfile"]);
+    Route::get("posts",[PostController::class,"getPosts"]);
+    Route::get("post/{uuid}",[PostController::class,"getPost"]);
+    Route::get("user/posts",[PostController::class,"getUserPosts"]);
+});
+
 Route::middleware(["auth:sanctum"])->group(function(){
+    Route::prefix("add")->group(function(){
+    Route::post("profile",[ProfileController::class,"onboard"]);
+    });
+});
+
+Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
     Route::prefix("get")->group(function(){
-        Route::get("profile",[ProfileController::class,"getProfile"]);
-        Route::get("posts",[PostController::class,"getPosts"]);
-        Route::get("post/{uuid}",[PostController::class,"getPost"]);
-        Route::get("user/posts",[PostController::class,"getUserPosts"]);
     });
     Route::prefix("add")->group(function(){
-        Route::post("profile",[ProfileController::class,"onboard"]);
         Route::post("post",[PostController::class,"createPost"]);
         Route::post("like",[PostLikeController::class,"like"]);
         Route::post("unlike",[PostLikeController::class,"unlike"]);
