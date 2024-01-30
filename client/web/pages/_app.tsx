@@ -14,6 +14,9 @@ import {
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { GlobalState } from "../context/GlobalState";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [

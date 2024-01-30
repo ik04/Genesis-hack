@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+Route::get("healthcheck",function(){
+    return response()->json(["message"=>"hi mom"],200);
+});
 Route::post("authenticate",[UserController::class,"authenticate"]);
