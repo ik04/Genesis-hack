@@ -7,21 +7,25 @@ import { useAccount } from "wagmi";
 import axios from "axios";
 
 const Home: NextPage = () => {
+  const { isConnected, address } = useAccount();
   useEffect(() => {
-    if (typeof window !== "undefined" && (window as any).ethereum) {
-      const ethereum = (window as any).ethereum;
-      ethereum.on("connect", (connectInfo: any) => {
-        console.log("hi mom");
-        const resp = axios.post(
-          `${process.env.PUBLIC_DOMAIN}/api/authenticate`,
-          { wallet_address: "" }
-        );
-        console.log(resp);
-      });
-    } else {
-      console.log("MetaMask is not installed");
-    }
-  }, []); // Empty dependency array ensures this effect runs only once after component mounts
+    const handleConnect = async () => {
+      if (isConnected) {
+        try {
+          const resp = await axios.post(
+            `${process.env.NEXT_PUBLIC_DOMAIN}/api/authenticate`,
+            { wallet_address: address }
+          );
+          console.log("Authentication response:", resp.data);
+        } catch (error) {
+          console.error("Error authenticating:", error);
+        }
+      } else {
+        console.log("No account found");
+      }
+    };
+    handleConnect();
+  }, []);
 
   return (
     <div className={styles.container}>
