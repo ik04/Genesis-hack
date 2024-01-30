@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string("wallet_address")->index()->nullable();
+            $table->string("wallet_address")->index()->unique();
             $table->timestamps();
         });
     }
