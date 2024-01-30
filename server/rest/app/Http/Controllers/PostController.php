@@ -83,3 +83,14 @@ class PostController extends Controller
         return response()->json(["posts"=>$posts],200);
     }
 }
+
+/**
+ * GPT explanation
+ *  Joins: The query joins the posts table with the profiles table to get the username associated with each post. Additionally, it performs a left join with the post_likes table on the id column of posts and the post_id column of post_likes to include likes information for each post.
+
+    Grouping: After joining the tables, the query uses GROUP BY posts.id to group the result set by the id column of the posts table. This means that all rows with the same id value (i.e., rows representing the same post) are grouped together.
+
+    Aggregation: Within each group, the COUNT(post_likes.id) function is used to count the number of rows in the post_likes table that match each group. Since the join ensures that each row in the post_likes table corresponds to a like on a specific post, counting the rows effectively counts the number of likes for each post.
+
+    Result: The query returns a result set where each row represents a post, and the likes column in each row contains the count of likes for that post. So, each post in the result set has an associated count of likes.
+ */
