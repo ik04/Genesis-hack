@@ -19,13 +19,16 @@ const beratest = {
   },
   testnet:true,
 } 
+
 import {
   polygonMumbai,
   goerli,
   mainnet,
   optimism,
+
   
 } from 'wagmi/chains';
+
 
 
 
@@ -34,15 +37,19 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
     mainnet,
     beratest,
     optimism,
+
     polygonMumbai,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
+
   ],
   [publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
+
   appName: 'SocialMediaApp',
   projectId: 'YOUR_PROJECT_ID',
+
   chains,
 });
 
@@ -56,11 +63,13 @@ const wagmiConfig = createConfig({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
+
       <RainbowKitProvider chains={chains} theme={lightTheme({
         accentColor:"#1A040B",
         accentColorForeground:"#E7C4B1"
       })}>
         <Component {...pageProps} />
+
       </RainbowKitProvider>
     </WagmiConfig>
   );

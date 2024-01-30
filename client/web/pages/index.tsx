@@ -16,6 +16,7 @@ const Home: NextPage = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
 };
+
   return (
     <div>
       <Head>
@@ -43,12 +44,14 @@ const Home: NextPage = () => {
         <input value={inputText} onChange={handleInputChange} className='2xl:w-[50rem] w-16 xl:w-96 xl:h-12 rounded-2xl bg-[#E7C4B1] border-2 border-[#1A040B] p-2 xl:ml-4' placeholder='Search...'  />
         <button onClick={handleSearch} className='bg-transparent border-2 border-white p-2 rounded-2xl hover:scale-110 transition-all'> Search </button>
         <ConnectButton />
+
         </div>
 
       <div className='flex items-center justify-center'>
         <h1 className='font-Mont text-[#1A040B] text-5xl xl:text-6xl text-center p-10'> Where <b>blockchain</b> developers get a <b>'pawsitive'</b> lift </h1>
         <Image src={trees} className='bottom-0 absolute' />
       </div>
+
       </main>
       <div className='bg-[#1A040B] min-h-screen '>
 
