@@ -52,3 +52,4 @@ Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
         Route::delete("post/{uuid}",[PostController::class,"delete"]);
     });
 });
+// todo: add a categories table and separate questions and posts

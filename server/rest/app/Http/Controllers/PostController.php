@@ -72,6 +72,7 @@ class PostController extends Controller
     }
     
     public function getPost(Request $request,$uuid){
+        // todo: attach comments too
         $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
                      ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
                      ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
