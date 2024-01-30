@@ -34,7 +34,18 @@ class PostController extends Controller
         ]);
         return response()->json(["message" => "Post updated successfully.", "post" => $post], 200);
     }
-    public function delete(){
+    public function delete($uuid,Request $request){
+        $post = Post::where("post_uuid",$uuid)->first();
+        if(!$post){
+            return response()->json(["error" => "Post not found."], 404);
+
+        }
+        if ($post->user_id !== $request->user()->id) {
+            return response()->json(["error" => "You are not authorized to edit this post."], 403);
+        }
+
+        $post->delete();
+        return response()->json(["message" => "Post deleted successfully."], 200);
     }
     public function getPosts(){
         $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")->select("profiles.username","posts.title","posts.description")->orderby("posts.created_at","DESC")->get();
@@ -45,7 +56,7 @@ class PostController extends Controller
         return response()->json(["posts"=>$posts]);
     }
     public function getPost(Request $request,$uuid){
-        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")->select("profiles.username","posts.title","posts.description")->where("user_id",$request->user()->id)->where("post_uuid",$uuid)->orderby("posts.created_at","DESC")->get();
+        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")->select("profiles.username","posts.title","posts.description")->where("posts.user_id",$request->user()->id)->where("post_uuid",$uuid)->orderby("posts.created_at","DESC")->get();
         return response()->json(["posts"=>$posts]);
     }
 }
