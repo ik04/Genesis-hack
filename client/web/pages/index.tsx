@@ -3,30 +3,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { useAccount } from "wagmi";
-import axios from "axios";
 
 const Home: NextPage = () => {
-  const { isConnected, address } = useAccount();
-  useEffect(() => {
-    const handleConnect = async () => {
-      if (isConnected) {
-        try {
-          const resp = await axios.post(
-            `${process.env.NEXT_PUBLIC_DOMAIN}/api/authenticate`,
-            { wallet_address: address }
-          );
-          console.log("Authentication response:", resp.data);
-        } catch (error) {
-          console.error("Error authenticating:", error);
-        }
-      } else {
-        console.log("No account found");
-      }
-    };
-    handleConnect();
-  }, []);
-
   return (
     <div className={styles.container}>
       <Head>
