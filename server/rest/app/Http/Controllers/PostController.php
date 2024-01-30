@@ -5,12 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use App\Models\PostLike;
+use App\Services\PostService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class PostController extends Controller
 {
+    public function __construct(protected PostService $service)
+    {
+        
+    }
     public function createPost(CreatePostRequest $request){
         $validated = $request->validated();
         $post = Post::create([
@@ -53,35 +60,56 @@ class PostController extends Controller
     public function getPosts(){
         $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
                      ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
-                     ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+                     ->select("profiles.username","posts.title","posts.post_uuid","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
                      ->groupBy("posts.id")
                      ->orderby("posts.created_at","DESC")
                      ->get();
         return response()->json(["posts"=>$posts],200);
     }
     
-    public function getUserPosts(Request $request){
+    public function getUserPosts(Request $request,$username){
+        // ! validate usernames to prevent problems
         $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
                      ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
-                     ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
-                     ->where("posts.user_id",$request->user()->id)
+                     ->select("profiles.username","posts.post_uuid","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+                     ->where("posts.user_id",$username)
                      ->groupBy("posts.id")
                      ->orderby("posts.created_at","DESC")
                      ->get();
         return response()->json(["posts"=>$posts],200);
     }
     
-    public function getPost(Request $request,$uuid){
-        // todo: attach comments too
-        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
-                     ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
-                     ->select("profiles.username","posts.title","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
-                     ->where("posts.user_id",$request->user()->id)
-                     ->where("posts.post_uuid",$uuid)
-                     ->groupBy("posts.id")
-                     ->orderby("posts.created_at","DESC")
-                     ->get();
-        return response()->json(["posts"=>$posts],200);
+    public function getPost($uuid,Request $request){
+        try{
+            // todo: attach comments too
+            $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
+            ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
+            ->select("profiles.username","posts.title","posts.post_uuid","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+            ->where("posts.post_uuid",$uuid)
+            ->groupBy("posts.id")
+            ->orderby("posts.created_at","DESC")
+            ->get();
+            return response()->json(["posts"=>$posts],200);
+        }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
+        }
+    }
+    public function authGetPost($uuid,Request $request){
+        try{
+            // todo: attach comments too
+            $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
+            ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
+            ->select("profiles.username","posts.title","posts.post_uuid","posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+            ->where("posts.post_uuid",$uuid)
+            ->groupBy("posts.id")
+            ->orderby("posts.created_at","DESC")
+            ->get();
+            $postId = $this->service->getPostId($uuid);
+            $isLiked = PostLike::where("user_id",$request->user()->id)->where("post_id",$postId)->exists();
+            return response()->json(["posts"=>$posts,"is_liked" => $isLiked],200);
+        }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
+        }
     }
 }
 
