@@ -3,13 +3,15 @@ import type { NextPage } from 'next';
 import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import trees from "../assets/Group.png"
 const Home: NextPage = () => {
 
    const [inputText,setInputText] = useState("")
-
+   const router = useRouter();
    const handleSearch = () => {
     console.log(inputText);
+    router.push('/forum');
   };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
@@ -32,9 +34,9 @@ const Home: NextPage = () => {
   <circle cx="25" cy="25" r="25" fill="#7A7A7A"/>
 </svg>
           </div>
-        <h1 className='text-[#1A040B] text-lg xl:text-3xl font-Mont font-bold '> Bear Hug </h1>
+        <a href='/' className='text-[#1A040B] text-lg xl:text-3xl font-Mont font-bold '> Bear Hug </a>
         <div className='buttons  gap-7 ml-[30px] hidden lg:flex'>
-        <a href='/' className='text-[#1A040B] text-2xl font-normal font-Mont'> Home </a>
+        <a href='/' className='text-[#1A040B] text-2xl font-normal font-Mont'> Rewards </a>
         <a  href='#about' className='text-[#1A040B] text-2xl font-normal font-Mont'> About </a>
        
         </div>
