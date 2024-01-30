@@ -23,6 +23,8 @@ Route::get("healthcheck",function(){
     return response()->json(["message"=>"hi mom"],200);
 });
 Route::post("authenticate",[UserController::class,"authenticate"]);
+Route::get("user-data",[UserController::class,"userData"]); 
+
 
 
 Route::prefix("get")->group(function(){
