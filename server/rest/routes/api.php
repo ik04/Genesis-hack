@@ -30,6 +30,7 @@ Route::prefix("get")->group(function(){
     Route::get("posts",[PostController::class,"getPosts"]);
     Route::get("post/{uuid}",[PostController::class,"getPost"]);
     Route::get("user/posts",[PostController::class,"getUserPosts"]);
+    Route::get("post/{uuid}/comments",[PostCommentController::class,"getComments"]);
 });
 
 Route::middleware(["auth:sanctum"])->group(function(){
@@ -40,6 +41,8 @@ Route::middleware(["auth:sanctum"])->group(function(){
 
 Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
     Route::prefix("get")->group(function(){
+        // * specific to user
+        Route::get("user/post/{uuid}/comments",[PostCommentController::class,"getComments"]);
         Route::get("user/post/{uuid}",[PostController::class,"authGetPost"]);
     });
     Route::prefix("add")->group(function(){
