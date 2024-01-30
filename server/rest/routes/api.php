@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -21,19 +22,34 @@ Route::get("healthcheck",function(){
 });
 Route::post("authenticate",[UserController::class,"authenticate"]);
 
+
+Route::prefix("get")->group(function(){
+    Route::get("profile",[ProfileController::class,"getProfile"]);
+    Route::get("posts",[PostController::class,"getPosts"]);
+    Route::get("post/{uuid}",[PostController::class,"getPost"]);
+    Route::get("user/posts",[PostController::class,"getUserPosts"]);
+});
+
 Route::middleware(["auth:sanctum"])->group(function(){
+    Route::prefix("add")->group(function(){
+    Route::post("profile",[ProfileController::class,"onboard"]);
+    });
+});
+
+Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
     Route::prefix("get")->group(function(){
-        Route::get("profile",[ProfileController::class,"getProfile"]);
-        Route::get("posts",[PostController::class,"getPosts"]);
     });
     Route::prefix("add")->group(function(){
-        Route::post("profile",[ProfileController::class,"onboard"]);
         Route::post("post",[PostController::class,"createPost"]);
+        Route::post("like",[PostLikeController::class,"like"]);
+        Route::post("unlike",[PostLikeController::class,"unlike"]);
     });
     Route::prefix("edit")->group(function(){
         Route::post("profile",[ProfileController::class,"edit"]);
         Route::post("post/{uuid}",[PostController::class,"edit"]);
     });
     Route::prefix("delete")->group(function(){
+        Route::delete("post/{uuid}",[PostController::class,"delete"]);
     });
 });
+// todo: add a categories table and separate questions and posts

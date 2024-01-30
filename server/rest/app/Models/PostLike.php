@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class PostLike extends Model
 {
     use HasFactory;
     protected $fillable = [
         "user_id",
-        "name",
-        "username",
-         // todo: add monkeys
+        "post_id"
     ];
 }

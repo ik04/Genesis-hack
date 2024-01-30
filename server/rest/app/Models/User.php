@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        "wallet_address"
+        "wallet_address",
+        "is_first_login"
     ];
 }
