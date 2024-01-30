@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\SearchPostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\PostLike;
@@ -110,6 +111,20 @@ class PostController extends Controller
         }catch(Exception $e){
             return response()->json(["error"=>$e->getMessage()]);
         }
+    }
+    public function searchPosts(SearchPostRequest $request){
+        $validated = $request->validated();
+        $keyword = $validated["query"];
+    
+        $posts = Post::join("profiles","profiles.user_id","=","posts.user_id")
+                     ->leftJoin("post_likes", "posts.id", "=", "post_likes.post_id")
+                     ->select("profiles.username", "posts.title", "posts.post_uuid", "posts.description", DB::raw("COUNT(post_likes.id) as likes"))
+                     ->where("posts.title", "LIKE", "%$keyword%")
+                     ->groupBy("posts.id")
+                     ->orderby("posts.created_at","DESC")
+                     ->get();
+    
+        return response()->json(["posts"=>$posts], 200);
     }
 }
 

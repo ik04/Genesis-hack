@@ -34,6 +34,7 @@ Route::prefix("get")->group(function(){
     Route::get("user/posts",[PostController::class,"getUserPosts"]);
     Route::get("post/{uuid}/comments",[PostCommentController::class,"getComments"]);
 });
+Route::post("search/posts",[PostCommentController::class,"searchPosts"]);
 
 Route::middleware(["auth:sanctum"])->group(function(){
     Route::prefix("add")->group(function(){
