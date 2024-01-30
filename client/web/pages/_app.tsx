@@ -1,39 +1,55 @@
-import "../styles/globals.css";
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import type { AppProps } from "next/app";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import '../styles/globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
+import { getDefaultWallets, lightTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import type { AppProps } from 'next/app';
+import { type Chain } from 'viem';
+import { publicProvider } from 'wagmi/providers/public';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+const beratest = {
+  id:80085,
+  network:'Berachain Artio',
+  name:'Berachain Artio',
+  nativeCurrency : { name:'Bera', symbol:'BERA',decimals:18},
+  rpcUrls:{
+    default: { http: ['https://artio.rpc.berachain.com/'] },
+    public: { http: ['https://artio.rpc.berachain.com/'] }
+  },
+  blockExplorers:{
+    default: { name: 'Artio Testnet', url: 'https://artio.beratrail.io/' },
+  },
+  testnet:true,
+} 
+
 import {
-  arbitrum,
+  polygonMumbai,
   goerli,
   mainnet,
   optimism,
-  polygon,
-  base,
-  zora,
-} from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
-import { GlobalState } from "../context/GlobalState";
-import axios from "axios";
 
-axios.defaults.withCredentials = true;
+  
+} from 'wagmi/chains';
+
+
+
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
-    polygon,
+    beratest,
     optimism,
-    arbitrum,
-    base,
-    zora,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
+
+    polygonMumbai,
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
+
   ],
   [publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "RainbowKit App",
-  projectId: "YOUR_PROJECT_ID",
+
+  appName: 'SocialMediaApp',
+  projectId: 'YOUR_PROJECT_ID',
+
   chains,
 });
 
@@ -47,10 +63,13 @@ const wagmiConfig = createConfig({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <GlobalState>
-          <Component {...pageProps} />
-        </GlobalState>
+
+      <RainbowKitProvider chains={chains} theme={lightTheme({
+        accentColor:"#1A040B",
+        accentColorForeground:"#E7C4B1"
+      })}>
+        <Component {...pageProps} />
+
       </RainbowKitProvider>
     </WagmiConfig>
   );
