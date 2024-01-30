@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CommentLikeController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\ProfileController;
@@ -32,17 +34,21 @@ Route::prefix("get")->group(function(){
 
 Route::middleware(["auth:sanctum"])->group(function(){
     Route::prefix("add")->group(function(){
-    Route::post("profile",[ProfileController::class,"onboard"]);
+        Route::post("profile",[ProfileController::class,"onboard"]);
     });
 });
 
 Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
     Route::prefix("get")->group(function(){
+        Route::get("user/post/{uuid}",[PostController::class,"authGetPost"]);
     });
     Route::prefix("add")->group(function(){
         Route::post("post",[PostController::class,"createPost"]);
-        Route::post("like",[PostLikeController::class,"like"]);
-        Route::post("unlike",[PostLikeController::class,"unlike"]);
+        Route::post("post/like",[PostLikeController::class,"like"]);
+        Route::post("post/unlike",[PostLikeController::class,"unlike"]);
+        Route::post("comment",[PostCommentController::class,"addComment"]);
+        Route::post("comment/like",[CommentLikeController::class,"like"]);
+        Route::post("comment/unlike",[CommentLikeController::class,"unlike"]);
     });
     Route::prefix("edit")->group(function(){
         Route::post("profile",[ProfileController::class,"edit"]);
