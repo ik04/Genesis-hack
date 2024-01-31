@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string("wallet_address")->index()->unique();
-            $table->timestamps();
+        Schema::table('posts', function (Blueprint $table) {
+            $table->uuid("post_uuid")->unique();
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::table('posts', function (Blueprint $table) {
+            //
+        });
     }
 };
