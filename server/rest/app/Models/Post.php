@@ -12,6 +12,7 @@ class Post extends Model
         "user_id",
         "title",
         "description",
-        "post_uuid"
+        "post_uuid",
+        "category"
     ];
 }

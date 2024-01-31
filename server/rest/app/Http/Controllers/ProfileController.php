@@ -11,6 +11,10 @@ class ProfileController extends Controller
 {
     public function onboard(CreateProfileRequest $request){
         $validated = $request->validated();
+        $doesUsernameExist = Profile::where("username",$validated["username"])->exists();
+        if($doesUsernameExist){
+            return response()->json(["error" => "username already exists"],400);
+        }
         $profile = Profile::create([
             "name" => $validated["name"],
             "username" => $validated["username"],

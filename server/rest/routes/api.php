@@ -23,6 +23,8 @@ Route::get("healthcheck",function(){
     return response()->json(["message"=>"hi mom"],200);
 });
 Route::post("authenticate",[UserController::class,"authenticate"]);
+Route::get("user-data",[UserController::class,"userData"]); 
+
 
 
 Route::prefix("get")->group(function(){
@@ -32,6 +34,7 @@ Route::prefix("get")->group(function(){
     Route::get("user/posts",[PostController::class,"getUserPosts"]);
     Route::get("post/{uuid}/comments",[PostCommentController::class,"getComments"]);
 });
+Route::post("search/posts",[PostCommentController::class,"searchPosts"]);
 
 Route::middleware(["auth:sanctum"])->group(function(){
     Route::prefix("add")->group(function(){
@@ -40,6 +43,9 @@ Route::middleware(["auth:sanctum"])->group(function(){
 });
 
 Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
+    Route::get("is-onboard",function(){
+        return response()->noContent();
+    });
     Route::prefix("get")->group(function(){
         // * specific to user
         Route::get("user/post/{uuid}/comments",[PostCommentController::class,"getComments"]);
@@ -47,6 +53,7 @@ Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
     });
     Route::prefix("add")->group(function(){
         Route::post("post",[PostController::class,"createPost"]);
+        Route::post("question",[PostController::class,"createQuestion"]);
         Route::post("post/like",[PostLikeController::class,"like"]);
         Route::post("post/unlike",[PostLikeController::class,"unlike"]);
         Route::post("comment",[PostCommentController::class,"addComment"]);
