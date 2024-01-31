@@ -58,7 +58,7 @@ const Home: NextPage = () => {
         <div className='flex p-14 gap-20'>
           <Image src={bear} className='w-[30.625rem]' />
         <div className='flex flex-col gap-5'>
-        <h1 className='text-white font-Mont text-5xl font-bold'> What do we do?</h1>
+        <h1 id='about' className='text-white font-Mont text-5xl font-bold'> What do we do?</h1>
         <h2 className='text-white font-Mont text-4xl'> At Bear Hug, we foster a thriving community where blockchain developers come together to exchange insights, seek technical guidance, and build meaningful connections. Our forum, powered by berachain, serves as a hub for collaborative problem-solving and knowledge sharing within the blockchain development sphere. </h2>
         </div>
         </div>
