@@ -39,15 +39,18 @@ class UserController extends Controller
                 'error' => "Unauthenticated"
             ],401);
         }
-        $profile = Profile::select("username","name")->where("user_id",$user->id)->first();
-        return response() -> json([
-            "name" => $profile->name,
-            "username" => $profile->username,
+        $data = [
             'wallet_address' => $user->wallet_address,
             'is_first_login' => $user->is_first_login,
             'access_token' => $request -> cookie('at'),
             'id' => $user->id
-        ],200);
+        ];
+        if(!$user->is_first_login){
+            $profile = Profile::select("username","name")->where("user_id",$user->id)->first();
+            $data["name"] = $profile->name;
+            $data["username"] = $profile->username;
+        }
+        return response() -> json($data,200);
     }
     public function logout(Request $request){
         $request->user()->tokens()->delete();

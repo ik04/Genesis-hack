@@ -1,10 +1,12 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import trees from "../assets/Group.png";
+import { useAccount } from "wagmi";
+import axios from "axios";
 const Home: NextPage = () => {
   const [inputText, setInputText] = useState("");
   const router = useRouter();
@@ -15,6 +17,19 @@ const Home: NextPage = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
   };
+  const { isConnected, address } = useAccount();
+
+  const login = async () => {
+    if (isConnected) {
+      const resp = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/authenticate`,
+        { wallet_address: address }
+      );
+    }
+  };
+  useEffect(() => {
+    login();
+  }, [isConnected, address]);
 
   return (
     <div>

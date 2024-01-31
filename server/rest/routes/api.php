@@ -43,6 +43,9 @@ Route::middleware(["auth:sanctum"])->group(function(){
 });
 
 Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
+    Route::get("is-onboard",function(){
+        return response()->noContent();
+    });
     Route::prefix("get")->group(function(){
         // * specific to user
         Route::get("user/post/{uuid}/comments",[PostCommentController::class,"getComments"]);
