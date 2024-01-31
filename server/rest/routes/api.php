@@ -53,6 +53,7 @@ Route::middleware(["auth:sanctum","checkFirstLogin"])->group(function(){
     });
     Route::prefix("add")->group(function(){
         Route::post("post",[PostController::class,"createPost"]);
+        Route::post("question",[PostController::class,"createQuestion"]);
         Route::post("post/like",[PostLikeController::class,"like"]);
         Route::post("post/unlike",[PostLikeController::class,"unlike"]);
         Route::post("comment",[PostCommentController::class,"addComment"]);

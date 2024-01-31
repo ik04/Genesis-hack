@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Category;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\SearchPostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -26,6 +27,17 @@ class PostController extends Controller
             "description" => $validated["description"],
             "user_id" => $request->user()->id,
             "post_uuid" => Uuid::uuid4()
+        ]);
+        return response()->json(["message" => "Post Created!", "post" => $post],201);
+    }
+    public function createQuestion(CreatePostRequest $request){
+        $validated = $request->validated();
+        $post = Post::create([
+            "title" => $validated["title"],
+            "description" => $validated["description"],
+            "user_id" => $request->user()->id,
+            "post_uuid" => Uuid::uuid4(),
+            "category" => Category::QUESTION->value
         ]);
         return response()->json(["message" => "Post Created!", "post" => $post],201);
     }
