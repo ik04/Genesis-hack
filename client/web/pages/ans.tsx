@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Post from "../components/post";
-import posts from "../components/posts.json"
+
 const forum = ()=>{
     const [inputText,setInputText] = useState("")
 
@@ -34,16 +33,9 @@ const forum = ()=>{
           <a href="/" className="text-3xl text-[#E7C4B1] font-Mont"> Rewards </a>
           <button className="bg-[#E7C4B1] text-[#1A040B] text-3xl font-bold rounded-2xl font-Mont p-2 mt-16"> + Ask Query </button>
        </div>
-        <div className=" px-6 py-9  w-screen flex flex-col">
-          <div className="h-28 border-b-2 border-[#E7C4B1] ">
+        <div className="h-44 px-6 py-9 border-b-2 border-[#E7C4B1] w-screen flex flex-col">
           <h1 className="text-white text-2xl font-Mont"> Results for: </h1>
           <h2 className="text-white text-4xl font-Mont font-bold" > "inputText from useState goes here" </h2>
-          </div>
-        <div>
-        {posts.map((post, index) => (
-                            <Post key={index} {...post} />
-                        ))}
-        </div>
         </div>
       </div>
       </main>
