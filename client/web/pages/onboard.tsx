@@ -21,6 +21,7 @@ const onboard = () => {
       const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/add/profile`;
       const resp = axios.post(url, { name: name, username: username });
       console.log(resp);
+      location.href = "/forum";
     }
   };
   return (

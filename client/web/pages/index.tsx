@@ -20,11 +20,15 @@ const Home: NextPage = () => {
   const { isConnected, address } = useAccount();
 
   const login = async () => {
-    if (isConnected) {
-      const resp = await axios.post(
-        `${process.env.NEXT_PUBLIC_DOMAIN}/api/authenticate`,
-        { wallet_address: address }
-      );
+    try {
+      if (isConnected && address) {
+        const resp = await axios.post(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/api/authenticate`,
+          { wallet_address: address }
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   useEffect(() => {

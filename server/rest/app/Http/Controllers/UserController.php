@@ -43,7 +43,6 @@ class UserController extends Controller
             'wallet_address' => $user->wallet_address,
             'is_first_login' => $user->is_first_login,
             'access_token' => $request -> cookie('at'),
-            'id' => $user->id
         ];
         if(!$user->is_first_login){
             $profile = Profile::select("username","name")->where("user_id",$user->id)->first();

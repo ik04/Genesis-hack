@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import { useState } from "react";
+import { GlobalContext } from "../context/GlobalContext";
 
 export const Dashboard: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [inputText, setInputText] = useState("");
@@ -11,6 +12,9 @@ export const Dashboard: React.FC<{ children: ReactNode }> = ({ children }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
   };
+  const { username } = useContext(GlobalContext);
+  console.log(username);
+
   return (
     <main className=" bg-[#1A040B] min-h-screen">
       <div className="nav p-5 flex gap-1 xl:gap-5 items-center border-b-2 border-[#E7C4B1] ">
@@ -29,7 +33,6 @@ export const Dashboard: React.FC<{ children: ReactNode }> = ({ children }) => {
           href="/"
           className="text-[#E7C4B1] text-lg xl:text-3xl font-Mont font-bold "
         >
-          {" "}
           Bear Hug{" "}
         </a>
 
@@ -49,8 +52,9 @@ export const Dashboard: React.FC<{ children: ReactNode }> = ({ children }) => {
         <ConnectButton />
       </div>
 
-      <div className="flex  ">
+      <div className="flex">
         <div className="w-96 border-r-2 min-h-screen items-center gap-5 pt-12 flex flex-col border-[#E7C4B1]">
+          <div className="text-3xl text-[#E7C4B1] font-Mont">{username}</div>
           <a href="/" className="text-3xl text-[#E7C4B1] font-Mont">
             {" "}
             Home{" "}

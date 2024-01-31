@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dashboard } from "../components/dashboard";
+import { useEffect } from "react";
 
 const forum = () => {
   return (
@@ -39,7 +40,6 @@ export async function getServerSideProps(context: any) {
     const resp = await instance.get(url);
   } catch (error) {
     console.log(error);
-
     return {
       redirect: {
         permanent: false,
