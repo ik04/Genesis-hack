@@ -1,3 +1,6 @@
+
+import trees from "../assets/Group.png"
+import bear from "../assets/bear.gif"
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -7,6 +10,7 @@ import { useRouter } from "next/router";
 import trees from "../assets/Group.png";
 import { useAccount } from "wagmi";
 import axios from "axios";
+
 const Home: NextPage = () => {
   const [inputText, setInputText] = useState("");
   const router = useRouter();
@@ -106,7 +110,23 @@ const Home: NextPage = () => {
           <Image alt="trees" src={trees} className="bottom-0 absolute" />
         </div>
       </main>
-      <div className="bg-[#1A040B] min-h-screen "></div>
+
+      <div className='bg-[#1A040B] min-h-screen flex-col'>
+        <div className='flex p-14 gap-20'>
+          <Image src={bear} className='w-[30.625rem]' />
+        <div className='flex flex-col gap-5'>
+        <h1 className='text-white font-Mont text-5xl font-bold'> What do we do?</h1>
+        <h2 className='text-white font-Mont text-4xl'> At Bear Hug, we foster a thriving community where blockchain developers come together to exchange insights, seek technical guidance, and build meaningful connections. Our forum, powered by berachain, serves as a hub for collaborative problem-solving and knowledge sharing within the blockchain development sphere. </h2>
+        </div>
+        </div>
+        <div className='flex flex-col items-center justify-center gap-9'>
+          <h1 className='text-white font-Mont text-5xl font-bold'> I can get rewards for helping people ?</h1>
+          <h2 className='text-white font-Mont text-4xl text-center'>Absolutely! At Bear Hug, we believe in recognizing and rewarding valuable contributions within our community. By providing correct answers, insightful solutions, and helpful guidance to fellow developers, you have the opportunity to earn the coveted "Honeypot Award" and accumulate points that can be redeemed for Bera tokens. </h2>
+        </div>
+      </div>
+
+      
+=
     </div>
   );
 };
